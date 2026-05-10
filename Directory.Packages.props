@@ -1,10 +1,18 @@
 ﻿<Project>
-	<PropertyGroup>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageVersion  Include="Microsoft.AspNetCore.OpenApi" Version="8.0.21" />
-		<PackageVersion   Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-		<PackageVersion Include="SonarAnalyzer.CSharp" Version="10.25.0.139117" />
-	</ItemGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageVersion Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.26" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.21" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.26" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="QuestPDF" Version="2026.2.4" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.25.0.139117" />
+    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.18.0" />
+  </ItemGroup>
 </Project>
