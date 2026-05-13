@@ -1,1 +1,16 @@
-<Solution />
+<Solution>
+  <Folder Name="/Elementos de la solución/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="ClientesAPI/ClientesAPI.csproj" />
+  <Project Path="ComprasAPI/ComprasAPI.csproj" />
+  <Project Path="InventariosAPI/InventariosAPI.csproj" />
+  <Project Path="ProductosAPI/ProductosAPI.csproj" />
+  <Project Path="ProveedoresAPI/ProveedoresAPI.csproj" />
+  <Project Path="ReportesAPI/ReportesAPI.csproj" />
+  <Project Path="SucursalesAPI/SucursalesAPI.csproj" />
+  <Project Path="UsuariosAPI/UsuariosAPI.csproj" />
+  <Project Path="VentasAPI/VentasAPI.csproj" />
+  <Project Path="WebApp/WebApp.csproj" />
+</Solution>
