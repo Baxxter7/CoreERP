@@ -1,1 +1,163 @@
-Readme
+# CoreERP
+
+Sistema ERP modular basado en microservicios, construido con **.NET 8** y arquitectura de APIs independientes con frontend MVC.
+
+## Arquitectura
+
+```
+CoreERP
+├── ClientesAPI        → Gestión de clientes
+├── ComprasAPI         → Gestión de compras
+├── InventariosAPI     → Gestión de inventarios
+├── ProductosAPI       → Gestión de productos
+├── ProveedoresAPI     → Gestión de proveedores
+├── ReportesAPI        → Generación de reportes (PDF)
+├── SucursalesAPI      → Gestión de sucursales
+├── UsuariosAPI        → Autenticación y gestión de usuarios
+├── VentasAPI          → Gestión de ventas
+└── WebApp             → Frontend MVC (ASP.NET Core MVC)
+```
+
+## Stack Tecnológico
+
+| Componente | Tecnología |
+|---|---|
+| Framework | .NET 8 |
+| Base de datos | SQL Server (via Entity Framework Core 8) |
+| Autenticación | JWT Bearer + ASP.NET Core Identity |
+| Documentación APIs | Swagger / OpenAPI |
+| Generación PDF | QuestPDF |
+| Serialización | Newtonsoft.Json |
+| Mapeo de objetos | AutoMapper |
+| Análisis estático | SonarAnalyzer.CSharp |
+| Gestión de paquetes | Central Package Management |
+
+## Puertos de los servicios
+
+| Proyecto | HTTP | HTTPS |
+|---|---|---|
+| ClientesAPI | 5214 | 7150 |
+| ComprasAPI | 5019 | 7024 |
+| InventariosAPI | 5156 | 7123 |
+| ProductosAPI | 5170 | 7045 |
+| ProveedoresAPI | 5031 | 7070 |
+| ReportesAPI | 5029 | 7173 |
+| SucursalesAPI | 5260 | 7239 |
+| UsuariosAPI | 5010 | 7287 |
+| VentasAPI | 5179 | 7034 |
+| WebApp | 5101 | 7107 |
+
+## Requisitos
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- SQL Server (LocalDB o instancia completa)
+- Visual Studio 2022 v17.8+ o Rider 2024.1+
+
+## Primeros pasos
+
+### 1. Clonar el repositorio
+
+```bash
+git clone <url-del-repo>
+cd CoreERP
+```
+
+### 2. Restaurar paquetes
+
+```bash
+dotnet restore
+```
+
+### 3. Configurar cadenas de conexión
+
+Agregar la cadena de conexión a SQL Server en el `appsettings.json` de cada API que requiera base de datos:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=CoreERP_<Modulo>;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
+```
+
+### 4. Aplicar migraciones (por proyecto)
+
+```bash
+dotnet ef database update --project <ProyectoAPI>
+```
+
+### 5. Ejecutar un servicio
+
+```bash
+dotnet run --project <ProyectoAPI>
+```
+
+Cada API expone su documentación Swagger en `https://localhost:<HTTPS_PORT>/swagger`.
+
+## Estructura por microservicio
+
+Cada API sigue la estructura estándar de ASP.NET Core Web API:
+
+```
+<ProyectoAPI>/
+├── Controllers/     → Endpoints de la API
+├── Models/          → Entidades de dominio
+├── DTOs/            → Objetos de transferencia de datos
+├── Data/            → DbContext y configuración EF Core
+├── Program.cs       → Configuración del host y middleware
+└── appsettings.json → Configuración de la aplicación
+```
+
+### UsuariosAPI (el más avanzado)
+
+Es el único microservicio con código de dominio implementado:
+
+- **Modelos:** `ApplicationUser` (hereda `IdentityUser`, agrega `Nombre` y `Estado`), `ApplicationRole` (hereda `IdentityRole`, agrega `Estado`)
+- **DTOs:** `LoginDto`, `RegisterDto`, `UserDto`, `UpdateUserDto`, `ChangePasswordDto`, `RoleDto`
+- **DbContext:** `ApplicationDbContext` (hereda `IdentityDbContext`)
+- **Seeder:** `IdentitySeeder` — genera roles `Admin`, `Seller`, `Manager` y usuario administrador inicial
+- **Paquete adicional:** `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
+
+### ReportesAPI
+
+- No referencia Entity Framework Core (no tiene base de datos propia)
+- Utiliza **QuestPDF** para generación de reportes en PDF
+- Consume datos de los demás microservicios
+
+## Gestión centralizada de paquetes
+
+Las versiones de todos los paquetes NuGet se gestionan de forma centralizada en `Directory.Packages.props`. Los proyectos referencian paquetes sin especificar versión:
+
+```xml
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+```
+
+La versión se define una sola vez en `Directory.Packages.props`:
+
+```xml
+<PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
+```
+
+## Estado del proyecto
+
+| Microservicio | Scaffolding | Modelos | DTOs | Endpoints | BD |
+|---|---|---|---|---|---|
+| ClientesAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
+| ComprasAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
+| InventariosAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
+| ProductosAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
+| ProveedoresAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
+| ReportesAPI | ✅ | ⬜ | ⬜ | ⬜ | N/A |
+| SucursalesAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
+| UsuariosAPI | ✅ | ✅ | ✅ | ⬜ | ⬜ |
+| VentasAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
+| WebApp | ✅ | ⬜ | ⬜ | ⬜ | N/A |
+
+## Notas importantes
+
+- **Autenticación:** Los paquetes JWT Bearer e Identity están referenciados pero aún no están configurados en el pipeline de middleware de ningún proyecto.
+- **Cadenas de conexión:** Ningún `appsettings.json` tiene configurada una cadena de conexión a base de datos.
+- **Proyecto compartido:** No existe un proyecto de clases compartido (`Shared`/`Common`). Considerar crear uno para modelos, DTOs y utilidades comunes.
+- **Bug conocido:** En `IdentitySeeder.SeedAsync`, el usuario administrador se instancia pero nunca se persiste con `userManager.CreateAsync()`.
+- **CI/CD:** No hay pipelines configurados (`.github/workflows/` está vacío).
+- **Docker:** No hay soporte para contenedores aún.
