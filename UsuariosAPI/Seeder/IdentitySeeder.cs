@@ -2,7 +2,7 @@
 using UsuariosAPI.Models;
 
 namespace UsuariosAPI.Seeder;
-public class IdentitySeeder
+public static class IdentitySeeder
 {
     public static async Task SeedAsync(IServiceProvider serviceProvider)
     {
@@ -20,8 +20,8 @@ public class IdentitySeeder
             }
         }
 
-        var adminEmail = "administrador@mail.com";
-        var password = "Admin123@";
+        string adminEmail = "administrador@mail.com";
+        string adminPassword = "Admin123@";
 
         var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
 
@@ -33,6 +33,16 @@ public class IdentitySeeder
                 Email = adminEmail,
                 Estado = true
             };
+
+            var createResult = await userManager.CreateAsync(adminUser, adminPassword);
+
+            if (createResult.Succeeded)
+                await userManager.AddToRolesAsync(adminUser, new[] { "Admin" });
+            else
+            {
+                string? errors = string.Join("; ", createResult.Errors.Select(e => e.Description));
+                throw new Exception($"Error al crear el usuario Administrador: {errors}");
+            }
         }
            
     }
