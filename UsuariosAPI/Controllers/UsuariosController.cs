@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using UsuariosAPI.DTOs;
 using UsuariosAPI.Models;
 
 namespace UsuariosAPI.Controllers;
@@ -19,5 +20,17 @@ public class UsuariosController : ControllerBase
         _roleManager = roleManager;
     }
 
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterDto registerDto)
+    {
+        var user = new ApplicationUser
+        {
+            UserName = registerDto.Email,
+            Email = registerDto.Email,
+            Estado = true,
+            Nombre = registerDto.Nombre,
+        };
 
+        return Ok();
+    }
 }
