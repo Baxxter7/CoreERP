@@ -68,45 +68,7 @@ cd CoreERP
 dotnet restore
 ```
 
-### 3. Configurar cadenas de conexión
-
-Agregar la cadena de conexión a SQL Server en el `appsettings.json` de cada API que requiera base de datos:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=CoreERP_<Modulo>;Trusted_Connection=True;MultipleActiveResultSets=true"
-  }
-}
-```
-
-### 4. Aplicar migraciones (por proyecto)
-
-```bash
-dotnet ef database update --project <ProyectoAPI>
-```
-
-### 5. Ejecutar un servicio
-
-```bash
-dotnet run --project <ProyectoAPI>
-```
-
 Cada API expone su documentación Swagger en `https://localhost:<HTTPS_PORT>/swagger`.
-
-## Estructura por microservicio
-
-Cada API sigue la estructura estándar de ASP.NET Core Web API:
-
-```
-<ProyectoAPI>/
-├── Controllers/     → Endpoints de la API
-├── Models/          → Entidades de dominio
-├── DTOs/            → Objetos de transferencia de datos
-├── Data/            → DbContext y configuración EF Core
-├── Program.cs       → Configuración del host y middleware
-└── appsettings.json → Configuración de la aplicación
-```
 
 ### UsuariosAPI (el más avanzado)
 
