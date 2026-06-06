@@ -100,26 +100,3 @@ La versión se define una sola vez en `Directory.Packages.props`:
 <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
 ```
 
-## Estado del proyecto
-
-| Microservicio | Scaffolding | Modelos | DTOs | Endpoints | BD |
-|---|---|---|---|---|---|
-| ClientesAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| ComprasAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| InventariosAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| ProductosAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| ProveedoresAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| ReportesAPI | ✅ | ⬜ | ⬜ | ⬜ | N/A |
-| SucursalesAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| UsuariosAPI | ✅ | ✅ | ✅ | ⬜ | ⬜ |
-| VentasAPI | ✅ | ⬜ | ⬜ | ⬜ | ⬜ |
-| WebApp | ✅ | ⬜ | ⬜ | ⬜ | N/A |
-
-## Notas importantes
-
-- **Autenticación:** Los paquetes JWT Bearer e Identity están referenciados pero aún no están configurados en el pipeline de middleware de ningún proyecto.
-- **Cadenas de conexión:** Ningún `appsettings.json` tiene configurada una cadena de conexión a base de datos.
-- **Proyecto compartido:** No existe un proyecto de clases compartido (`Shared`/`Common`). Considerar crear uno para modelos, DTOs y utilidades comunes.
-- **Bug conocido:** En `IdentitySeeder.SeedAsync`, el usuario administrador se instancia pero nunca se persiste con `userManager.CreateAsync()`.
-- **CI/CD:** No hay pipelines configurados (`.github/workflows/` está vacío).
-- **Docker:** No hay soporte para contenedores aún.
