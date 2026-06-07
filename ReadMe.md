@@ -86,17 +86,3 @@ Es el único microservicio con código de dominio implementado:
 - Utiliza **QuestPDF** para generación de reportes en PDF
 - Consume datos de los demás microservicios
 
-## Gestión centralizada de paquetes
-
-Las versiones de todos los paquetes NuGet se gestionan de forma centralizada en `Directory.Packages.props`. Los proyectos referencian paquetes sin especificar versión:
-
-```xml
-<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
-```
-
-La versión se define una sola vez en `Directory.Packages.props`:
-
-```xml
-<PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.26" />
-```
-
