@@ -31,6 +31,6 @@ public class UsuariosController : ControllerBase
             Nombre = registerDto.Nombre,
         };
 
-        return Ok();
+        return Ok("Register");
     }
 }
