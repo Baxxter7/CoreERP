@@ -23,6 +23,11 @@ public class UsuariosController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto registerDto)
     {
+        var role = await _roleManager.FindByNameAsync(registerDto.Rol);
+
+        if (role is null || !role.Estado)
+            return BadRequest("El rol especificado no existe o está inactivo.");
+
         var user = new ApplicationUser
         {
             UserName = registerDto.Email,
@@ -31,6 +36,19 @@ public class UsuariosController : ControllerBase
             Nombre = registerDto.Nombre,
         };
 
-        return Ok("Register");
+        var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+        if (!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        var roleResult = await _userManager.AddToRoleAsync(user, registerDto.Rol);
+
+        if (!roleResult.Succeeded)
+        {
+            await _userManager.DeleteAsync(user);
+            return BadRequest("Error al asignar el rol al usuario");
+        }
+
+        return Ok("Usuario registrado exitosamente con rol");
     }
 }
