@@ -78,9 +78,9 @@ public class AuthController : ControllerBase
         );
 
         return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token)
-            }
+        {
+            token = new JwtSecurityTokenHandler().WriteToken(token)
+        }
         );
     }
 }
