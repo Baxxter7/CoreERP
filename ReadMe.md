@@ -46,9 +46,3 @@ CoreERP
 | UsuariosAPI | 5010 | 7287 |
 | VentasAPI | 5179 | 7034 |
 | WebApp | 5101 | 7107 |
-
-## Requisitos
-
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- SQL Server (LocalDB o instancia completa)
-- Visual Studio 2022 v17.8+ o Rider 2024.1+
