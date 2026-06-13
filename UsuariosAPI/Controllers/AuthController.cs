@@ -34,6 +34,12 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginDto loginDto)
     {
+        if (loginDto is null)
+            return BadRequest("Solicitud inválida");
+
+        if (string.IsNullOrWhiteSpace(loginDto.Email) || string.IsNullOrWhiteSpace(loginDto.Password))
+            return BadRequest("Email y contraseña son requeridos");
+
         ApplicationUser? user = await _userManager.FindByEmailAsync(loginDto.Email);
 
         if (user is null)
