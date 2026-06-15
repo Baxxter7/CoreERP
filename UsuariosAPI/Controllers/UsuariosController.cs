@@ -8,6 +8,7 @@ namespace UsuariosAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UsuariosController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
