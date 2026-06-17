@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UsuariosAPI.DTOs;
 using UsuariosAPI.Models;
 
@@ -50,5 +51,29 @@ public class UsuariosController : ControllerBase
         }
 
         return Ok("Usuario registrado exitosamente con rol");
+    }
+
+    [HttpGet("perfil")]
+    public async Task<ActionResult<UserDto>> Perfil()
+    {
+        var email = User.FindFirstValue(ClaimTypes.Name);
+
+        if (email is null)
+            return Unauthorized();
+
+        var user = await _userManager.FindByNameAsync(email);
+
+        if (user is null)
+            return NotFound();
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        return new UserDto
+        {
+            Email = email,
+            Nombre = user.Nombre,
+            Estado = user.Estado,
+            Roles = roles
+        };
     }
 }
