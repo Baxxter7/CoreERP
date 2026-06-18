@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using UsuariosAPI.DTOs;
 using UsuariosAPI.Models;
@@ -75,5 +76,26 @@ public class UsuariosController : ControllerBase
             Estado = user.Estado,
             Roles = roles
         };
+    }
+
+    [HttpGet("usuarios")]
+    public async Task<IActionResult> GetUsuarios()
+    {
+        var usuarios = await _userManager.Users.ToListAsync();
+        List<UserDto> listadoUsuarios = new List<UserDto>();
+
+        foreach (var user in usuarios)
+        {
+            var roles =  await _userManager.GetRolesAsync(user);
+            listadoUsuarios.Add(new UserDto
+            {
+                Email = user.Email,
+                Nombre = user.Nombre,
+                Estado = user.Estado,
+                Roles = roles
+            });
+        }
+
+        return Ok(listadoUsuarios);
     }
 }
