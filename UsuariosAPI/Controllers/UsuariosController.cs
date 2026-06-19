@@ -86,7 +86,7 @@ public class UsuariosController : ControllerBase
 
         foreach (var user in usuarios)
         {
-            var roles =  await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
             listadoUsuarios.Add(new UserDto
             {
                 Email = user.Email,
@@ -97,5 +97,26 @@ public class UsuariosController : ControllerBase
         }
 
         return Ok(listadoUsuarios);
+    }
+
+    [HttpGet("User")]
+    public async Task<IActionResult> GetUsuario([FromBody] string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user is null)
+            return NotFound("Usuario no encontrado");
+
+        var roles = await _userManager.GetRolesAsync(user);
+
+        var userDto = new UserDto
+        {
+            Email = user.Email,
+            Nombre = user.Nombre,
+            Estado = user.Estado,
+            Roles = roles
+        };
+
+        return Ok(userDto);
     }
 }
