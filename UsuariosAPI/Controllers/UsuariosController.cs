@@ -119,4 +119,22 @@ public class UsuariosController : ControllerBase
 
         return Ok(userDto);
     }
+
+    [HttpPost("change-password")]
+    public async Task<IActionResult> changePassword(ChangePasswordDto changePasswordDto)
+    {
+        var email = User.Identity.Name;
+        var user = await _userManager.FindByEmailAsync(email);
+
+        var result = await _userManager.ChangePasswordAsync(
+            user, 
+            changePasswordDto.CurrentPassword, 
+            changePasswordDto.NewPassword
+        );
+
+        if(!result.Succeeded)
+            return BadRequest(result.Errors);
+
+        return Ok("Contraseña actualizada correctamente.");
+    }
 }
