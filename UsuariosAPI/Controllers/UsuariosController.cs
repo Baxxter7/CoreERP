@@ -54,8 +54,8 @@ public class UsuariosController : ControllerBase
         return Ok("Usuario registrado exitosamente con rol");
     }
 
-    [HttpGet("perfil")]
-    public async Task<ActionResult<UserDto>> Perfil()
+    [HttpGet("profile")]
+    public async Task<ActionResult<UserDto>> Profile()
     {
         var email = User.FindFirstValue(ClaimTypes.Name);
 
@@ -127,12 +127,12 @@ public class UsuariosController : ControllerBase
         var user = await _userManager.FindByEmailAsync(email);
 
         var result = await _userManager.ChangePasswordAsync(
-            user, 
-            changePasswordDto.CurrentPassword, 
+            user,
+            changePasswordDto.CurrentPassword,
             changePasswordDto.NewPassword
         );
 
-        if(!result.Succeeded)
+        if (!result.Succeeded)
             return BadRequest(result.Errors);
 
         return Ok("Contraseña actualizada correctamente.");
