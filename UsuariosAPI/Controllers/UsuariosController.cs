@@ -78,7 +78,7 @@ public class UsuariosController : ControllerBase
         };
     }
 
-    [HttpGet("usuarios")]
+    [HttpGet("users")]
     public async Task<IActionResult> GetUsuarios()
     {
         var usuarios = await _userManager.Users.ToListAsync();
@@ -99,7 +99,7 @@ public class UsuariosController : ControllerBase
         return Ok(listadoUsuarios);
     }
 
-    [HttpGet("User")]
+    [HttpGet("user")]
     public async Task<IActionResult> GetUsuario([FromBody] string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
