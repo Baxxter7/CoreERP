@@ -137,4 +137,35 @@ public class UsuariosController : ControllerBase
 
         return Ok("Contraseña actualizada correctamente.");
     }
+
+    [HttpPut("update-user")]
+    public async Task<IActionResult> updateUser(UpdateUserDto updateUser)
+    {
+        var user = await _userManager.FindByEmailAsync(updateUser.Email);
+
+        if (user is null) return NotFound("Usuario no encontrado");
+
+        user.Estado = updateUser.Estado;
+
+        var updateResult = await _userManager.UpdateAsync(user);
+
+        if(!updateResult.Succeeded) 
+            return BadRequest(updateResult.Errors);
+
+        if (!string.IsNullOrEmpty(updateUser.NuevoRol))
+        {
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            if(!removeResult.Succeeded)
+                return BadRequest("Error al remover roles anteriores");
+
+            var addResult = await _userManager.AddToRoleAsync(user, updateUser.NuevoRol);
+
+            if (!addResult.Succeeded)
+                return BadRequest("Error al asignar nuevo rol.");
+        }
+
+        return Ok("Usuario actualidad");
+    }
 }
