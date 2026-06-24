@@ -23,7 +23,7 @@ namespace UsuariosAPI.Controllers
         public async Task<IActionResult> GetRoles()
         {
             var roles = await _roleManager
-                .Roles.Select(r => new RoleDto( r.Name,  r.Estado))
+                .Roles.Select(r => new RoleDto(r.Name, r.Estado))
                 .ToListAsync();
 
             return Ok(roles);

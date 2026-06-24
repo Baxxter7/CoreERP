@@ -166,6 +166,8 @@ public class UsuariosController : ControllerBase
                 return BadRequest("Error al asignar nuevo rol.");
         }
 
-        return Ok("Usuario actualidad");
+        return Ok("Usuario actualidado");
     }
+
+
 }
