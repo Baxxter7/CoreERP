@@ -28,5 +28,25 @@ namespace UsuariosAPI.Controllers
 
             return Ok(roles);
         }
+
+        [HttpPatch("toggle/{roleName}")]
+        public async Task<IActionResult> ToogleEstado(string roleName)
+        {
+            var rol = await _roleManager
+                .Roles 
+                .FirstAsync(x => x.Name == roleName);
+
+            if (rol is null)
+                return NotFound("Rol no encontrado");
+
+            rol.Estado = !rol.Estado;
+
+            var result = await _roleManager.UpdateAsync(rol);
+
+            if(!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok($"Estado del rol cambiado a: {(rol.Estado ? "Activo" : "Inactivo")}");
+        }
     }
 }
