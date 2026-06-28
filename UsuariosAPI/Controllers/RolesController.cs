@@ -33,7 +33,7 @@ namespace UsuariosAPI.Controllers
         public async Task<IActionResult> ToogleEstado(string roleName)
         {
             var rol = await _roleManager
-                .Roles 
+                .Roles
                 .FirstAsync(x => x.Name == roleName);
 
             if (rol is null)
@@ -43,7 +43,7 @@ namespace UsuariosAPI.Controllers
 
             var result = await _roleManager.UpdateAsync(rol);
 
-            if(!result.Succeeded)
+            if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
             return Ok($"Estado del rol cambiado a: {(rol.Estado ? "Activo" : "Inactivo")}");

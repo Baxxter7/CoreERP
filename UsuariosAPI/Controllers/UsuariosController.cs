@@ -149,7 +149,7 @@ public class UsuariosController : ControllerBase
 
         var updateResult = await _userManager.UpdateAsync(user);
 
-        if(!updateResult.Succeeded) 
+        if (!updateResult.Succeeded)
             return BadRequest(updateResult.Errors);
 
         if (!string.IsNullOrEmpty(updateUser.NuevoRol))
@@ -157,7 +157,7 @@ public class UsuariosController : ControllerBase
             var currentRoles = await _userManager.GetRolesAsync(user);
             var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-            if(!removeResult.Succeeded)
+            if (!removeResult.Succeeded)
                 return BadRequest("Error al remover roles anteriores");
 
             var addResult = await _userManager.AddToRoleAsync(user, updateUser.NuevoRol);
