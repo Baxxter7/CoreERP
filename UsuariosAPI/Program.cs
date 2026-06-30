@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using UsuariosAPI.Data;
 using UsuariosAPI.Models;
+using UsuariosAPI.Seeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,15 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+
+    var services = scope.ServiceProvider;
+    await IdentitySeeder.SeedAsync(services);
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -94,5 +104,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
