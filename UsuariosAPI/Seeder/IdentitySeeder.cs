@@ -31,6 +31,7 @@ public static class IdentitySeeder
             {
                 UserName = adminEmail,
                 Email = adminEmail,
+                Nombre = "Administrador",
                 Estado = true
             };
 
@@ -41,7 +42,7 @@ public static class IdentitySeeder
             else
             {
                 string? errors = string.Join("; ", createResult.Errors.Select(e => e.Description));
-                throw new Exception($"Error al crear el usuario Administrador: {errors}");
+                throw new InvalidOperationException($"Error al crear el usuario Administrador: {errors}");
             }
         }
            
