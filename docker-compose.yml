@@ -1,0 +1,23 @@
+services:
+  sqlserverERP:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserverERP
+    ports:
+      - "1434:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "123John@"
+    volumes:
+      - sqlserverERP_data:/var/opt/mssql
+
+  usuarios-service:
+  build:
+    context: ./UsuariosAPI
+    dockerfile: Dockerfile
+  depends_on:
+    - sqlserverERP
+  enviroment:
+    - Jwt__Key=
+    - ConnectionStrings__DefaultConnection=
+  ports:
+    - "6007:8080"
