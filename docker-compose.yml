@@ -11,13 +11,16 @@ services:
       - sqlserverERP_data:/var/opt/mssql
 
   usuarios-service:
-  build:
-    context: ./UsuariosAPI
-    dockerfile: Dockerfile
-  depends_on:
-    - sqlserverERP
-  enviroment:
-    - Jwt__Key=
-    - ConnectionStrings__DefaultConnection=
-  ports:
-    - "6007:8080"
+    build:
+      context: .
+      dockerfile: UsuariosAPI/Dockerfile
+    depends_on:
+      - sqlserverERP
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Jwt__Key=AbcdefghijklmnopqrstuvwxyZ123456!
+      - ConnectionStrings__DefaultConnection=server=sqlserverERP;Database=UsuariosDb;User=sa;Password=123John@;TrustServerCertificate=True;
+    ports:
+      - "6007:8080"
+volumes:
+  sqlserverERP_data:
