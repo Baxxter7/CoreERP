@@ -100,7 +100,7 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet("user")]
-    public async Task<IActionResult> GetUsuario([FromBody] string email)
+    public async Task<IActionResult> GetUsuario([FromQuery] string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
 
