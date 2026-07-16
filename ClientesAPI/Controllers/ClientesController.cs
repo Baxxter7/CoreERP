@@ -34,5 +34,23 @@ namespace ClientesAPI.Controllers
 
             return Ok(listaClientes);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClienteDto>> GetCliente(int id)
+        {
+            var cliente = await _context.Clientes.FindAsync(id);
+
+            if(cliente is null)
+                return NotFound("Cliente no encontrado");
+
+            var clienteDto = new ClienteDto { 
+                Id = id,
+                Nombre = cliente.Nombre,
+                Telefono = cliente.Telefono,
+                Direccion= cliente.Direccion
+            };
+
+            return Ok(clienteDto);
+        }
     }
 }
