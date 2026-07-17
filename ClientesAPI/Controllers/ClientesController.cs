@@ -41,7 +41,7 @@ namespace ClientesAPI.Controllers
             var cliente = await _context.Clientes.FindAsync(id);
 
             if(cliente is null)
-                return NotFound("Cliente no encontrado");
+                return NotFound();
 
             var clienteDto = new ClienteDto { 
                 Id = id,
