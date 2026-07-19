@@ -40,14 +40,15 @@ namespace ClientesAPI.Controllers
         {
             var cliente = await _context.Clientes.FindAsync(id);
 
-            if(cliente is null)
+            if (cliente is null)
                 return NotFound();
 
-            var clienteDto = new ClienteDto { 
+            var clienteDto = new ClienteDto
+            {
                 Id = id,
                 Nombre = cliente.Nombre,
                 Telefono = cliente.Telefono,
-                Direccion= cliente.Direccion
+                Direccion = cliente.Direccion
             };
 
             return Ok(clienteDto);
