@@ -1,5 +1,6 @@
 ﻿using ClientesAPI.Data;
 using ClientesAPI.DTOs;
+using ClientesAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace ClientesAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ClienteDto>>> GetClientes()
+        public async Task<ActionResult<IEnumerable<ClienteDto>>> GetAll()
         {
             var clientesDb = await _context.Clientes.ToListAsync();
 
@@ -36,7 +37,7 @@ namespace ClientesAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ClienteDto>> GetCliente(int id)
+        public async Task<ActionResult<ClienteDto>> GetById(int id)
         {
             var cliente = await _context.Clientes.FindAsync(id);
 
@@ -52,6 +53,26 @@ namespace ClientesAPI.Controllers
             };
 
             return Ok(clienteDto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ClienteDto>> AddClient([FromBody]ClienteDto clienteDto)
+        {
+            if (string.IsNullOrWhiteSpace(clienteDto.Nombre))
+                return BadRequest("La propiedad nombre es obligatoria.");
+
+            Cliente cliente = new Cliente
+            {
+                Nombre = clienteDto.Nombre,
+                Telefono = clienteDto.Telefono,
+                Direccion = clienteDto.Direccion
+            };
+
+            _context.Clientes.Add(cliente);
+            await _context.SaveChangesAsync();
+
+            clienteDto.Id = cliente.Id;
+            return CreatedAtAction(nameof(GetById), new { Id = clienteDto.Id}, clienteDto);
         }
     }
 }
