@@ -56,7 +56,7 @@ namespace ClientesAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ClienteDto>> AddClient([FromBody]ClienteDto clienteDto)
+        public async Task<ActionResult<ClienteDto>> AddClient([FromBody] ClienteDto clienteDto)
         {
             if (string.IsNullOrWhiteSpace(clienteDto.Nombre))
                 return BadRequest("La propiedad nombre es obligatoria.");
@@ -72,7 +72,42 @@ namespace ClientesAPI.Controllers
             await _context.SaveChangesAsync();
 
             clienteDto.Id = cliente.Id;
-            return CreatedAtAction(nameof(GetById), new { Id = clienteDto.Id}, clienteDto);
+            return CreatedAtAction(nameof(GetById), new { Id = clienteDto.Id }, clienteDto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateClient(int id, [FromBody] ClienteDto clienteDto)
+        {
+            if (id != clienteDto.Id)
+                return BadRequest("ID cliente no coincide.");
+
+            if (string.IsNullOrWhiteSpace(clienteDto.Nombre))
+                return BadRequest("La propiedad nombre es obligatoria.");
+
+            Cliente? cliente = await _context.Clientes.FindAsync(id);
+            if (cliente is null)
+                return NotFound();
+
+            cliente.Nombre = clienteDto.Nombre;
+            cliente.Telefono = clienteDto.Telefono;
+            cliente.Direccion = clienteDto.Direccion;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteClient(int id) {
+            Cliente cliente = await _context.Clientes.FindAsync(id);
+
+            if (cliente is null)
+                return NotFound();
+
+            _context.Clientes.Remove(cliente);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
