@@ -78,5 +78,28 @@ namespace ProveedoresAPI.Controllers
                 proveedorDto
             );
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, ProveedorDto dto)
+        {
+            if (id != dto.Id)
+            {
+                return BadRequest();
+            }
+
+            var proveedor = await _context.Proveedores.FindAsync(id);
+
+            if (proveedor == null)
+                return NotFound();
+
+            proveedor.Nombre = dto.Nombre;
+            proveedor.Telefono = dto.Telefono;
+            proveedor.Direccion = dto.Direccion;
+            proveedor.Estado = dto.Estado;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
