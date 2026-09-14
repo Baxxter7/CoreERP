@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProveedoresAPI.Data;
 using ProveedoresAPI.DTOs;
+using ProveedoresAPI.Models;
 
 namespace ProveedoresAPI.Controllers
 {
@@ -54,6 +54,29 @@ namespace ProveedoresAPI.Controllers
                 return NotFound();
 
             return Ok(proveedor);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(ProveedorDto proveedorDto)
+        {
+            var proveedor = new Proveedor
+            {
+                Nombre = proveedorDto.Nombre,
+                Telefono = proveedorDto.Telefono,
+                Direccion = proveedorDto.Direccion,
+                Estado = true,
+            };
+
+            _context.Proveedores.Add(proveedor);
+            await _context.SaveChangesAsync();
+
+            proveedorDto.Id = proveedor.Id;
+
+            return CreatedAtAction(
+                nameof(Get),
+                new { id = proveedor.Id },
+                proveedorDto
+            );
         }
     }
 }
