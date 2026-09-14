@@ -35,6 +35,25 @@ namespace ProveedoresAPI.Controllers
             return Ok(proveedores);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProveedorDto>> Get(int id)
+        {
+            var proveedor = await _context.Proveedores
+                .Select(p => new ProveedorDto
+                {
+                    Id = p.Id,
+                    Nombre = p.Nombre,
+                    Telefono = p.Telefono,
+                    Direccion = p.Direccion,
+                    Estado = p.Estado,
+                })
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
 
+            if (proveedor == null)
+                return NotFound();
+
+            return Ok(proveedor);
+        }
     }
 }
