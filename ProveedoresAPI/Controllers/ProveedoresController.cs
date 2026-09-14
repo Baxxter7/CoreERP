@@ -101,5 +101,21 @@ namespace ProveedoresAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> ToggleEstado(int id)
+        {
+            var proveedor = await _context.Proveedores.FindAsync(id);
+
+            if (proveedor == null)
+                return NotFound();
+
+            proveedor.Estado = !proveedor.Estado;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }
