@@ -7,6 +7,6 @@
         public int SucursalId { get; set; }
         public DateTime Fecha { get; set; }
         public string Observaciones { get; set; } = string.Empty;
-        public List<DetalleRecepcionDto>? Detalles { get; set; }
+        public List<DetalleRecepcionDto> Detalles { get; set; }
     }
 }
