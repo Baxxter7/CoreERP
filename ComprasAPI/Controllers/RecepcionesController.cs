@@ -154,6 +154,32 @@ namespace ComprasAPI.Controllers
             }).ToList();
 
             await _dbContext.SaveChangesAsync();
+
+            recepcionDto.Id = recepcion.Id;
+
+            if (recepcion.Detalles.Any())
+            {
+                for (int i = 0; i < recepcion.Detalles.Count; i++)
+                {
+                    var detalle = recepcion.Detalles[i];
+                    recepcionDto.Detalles[i].Id = detalle.Id;
+                    recepcionDto.Detalles[i].RecepcionId = detalle.RecepcionId;
+
+                    MovimientoDto movimiento = new MovimientoDto
+                    {
+                        Tipo = "Entrada",
+                        ProductoId = detalle.ProductoId,
+                        SucursalId = recepcion.SucursalId,
+                        Cantidad = detalle.CantidadRecibida,
+                        Fecha = recepcion.Fecha,
+                        Origen = "Recepción",
+                        ReferenciaId = recepcion.Id,
+                    };
+
+                    await _inventoryServiceClient.RegistrarMovimientoYactualizarStockAsync(movimiento);
+                }
+            }
+
             await VerificarYDesactivarOrdenSiCompleta(recepcion.OrdenCompraId);
 
             return NoContent();
