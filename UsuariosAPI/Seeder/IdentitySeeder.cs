@@ -2,6 +2,7 @@
 using UsuariosAPI.Models;
 
 namespace UsuariosAPI.Seeder;
+
 public static class IdentitySeeder
 {
     public static async Task SeedAsync(IServiceProvider serviceProvider)
@@ -11,9 +12,9 @@ public static class IdentitySeeder
 
         var roles = new[] { "Admin", "Seller", "Manager" };
 
-        foreach(var role in roles)
+        foreach (var role in roles)
         {
-            if(!await roleManager.RoleExistsAsync(role))
+            if (!await roleManager.RoleExistsAsync(role))
             {
                 var newRole = new ApplicationRole(role);
                 await roleManager.CreateAsync(newRole);
@@ -25,7 +26,7 @@ public static class IdentitySeeder
 
         var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
 
-        if(existingAdmin == null)
+        if (existingAdmin == null)
         {
             var adminUser = new ApplicationUser
             {
@@ -45,6 +46,6 @@ public static class IdentitySeeder
                 throw new InvalidOperationException($"Error al crear el usuario Administrador: {errors}");
             }
         }
-           
+
     }
 }
